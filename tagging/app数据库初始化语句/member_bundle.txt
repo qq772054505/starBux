@@ -1,0 +1,31 @@
+set td=2020-08-11;
+--ali
+insert overwrite table u_analysis_app.member_bundle partition(pdate='${td}',channel='2')
+select p.member_id,case when sum(cast(p.bind_flag as int))> 0 then 1 else 0 end bundle  from (
+select a.member_id as member_id,
+bind_flag
+from u_analysis_dw.siebel_member a 
+join u_analysis_ods.tb_member_3app b on a.member_id=b.customer_id and b.pdate='${td}' and a.REG_CHANNEL_CD not  in('3PP-AP','3PP-EM','3PP-FZ','3PP-TB','3PP-TM','taobao') and b.app_enum in('1100','1101','1102','1103'))p group by p.member_id;
+--wechat
+insert overwrite table u_analysis_app.member_bundle partition(pdate='${td}',channel='3')
+select p.member_id,case when sum(cast(p.bind_flag as int))> 0 then 1 else 0 end bundle  from (
+select a.member_id as member_id,
+bind_flag
+from u_analysis_dw.siebel_member a 
+join u_analysis_ods.tb_member_3app b on a.member_id=b.customer_id and b.pdate='${td}' and a.REG_CHANNEL_CD not in('WeChat','MINI-WECHAT','MINI-WECHAT-OFF') and b.app_enum in('1201','1202','1203'))p group by p.member_id;
+--cmb
+insert overwrite table u_analysis_app.member_bundle partition(pdate='${td}',channel='4')
+select p.member_id,case when sum(cast(p.bind_flag as int))> 0 then 1 else 0 end bundle  from (
+select a.member_id as member_id,
+bind_flag
+from u_analysis_dw.siebel_member a 
+join u_analysis_ods.tb_member_3app b on a.member_id=b.customer_id and b.pdate='${td}' and a.REG_CHANNEL_CD<>'3PP-CMB' and b.app_enum='1501')p group by p.member_id;
+--apple
+insert overwrite table u_analysis_app.member_bundle partition(pdate='${td}',channel='5')
+select p.member_id,case when sum(cast(p.bind_flag as int))> 0 then 1 else 0 end bundle  from (
+select a.member_id as member_id,
+bind_flag
+from u_analysis_dw.siebel_member a 
+join u_analysis_ods.tb_member_3app b on a.member_id=b.customer_id and b.pdate='${td}' and a.REG_CHANNEL_CD<>'APP-APPLE' and b.app_enum = '1401')p group by p.member_id;
+
+

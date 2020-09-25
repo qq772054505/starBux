@@ -1,0 +1,15 @@
+--mop/mod/all recency
+--u_analysis_app.member_purchase_behavior_recency
+--all
+set td=2020-08-05;
+insert overwrite table u_analysis_app.member_purchase_behavior_recency partition (pdate='${td}',channel='all')
+select member_id,row_id,order_dt from(
+select member_id,row_id,order_dt,row_number() over(partition by member_id order by order_dt desc) rank from u_analysis_dw.siebel_cx_order where valid=1) p where rank=1;
+--mop
+insert overwrite table u_analysis_app.member_purchase_behavior_recency partition (pdate='${td}',channel='mop')
+select member_id,row_id,order_dt from(
+select member_id,row_id,order_dt,row_number() over(partition by member_id order by order_dt desc) rank from u_analysis_dw.siebel_cx_order where commit_type_cd in('MOP','Ali Koubei MOP','APP MOP PreOrder Today') and valid=1 and pdate>'2019-05-01' ) p where rank=1;
+--mod
+insert overwrite table u_analysis_app.member_purchase_behavior_recency partition (pdate='${td}',channel='mod')
+select member_id,row_id,order_dt from(
+select member_id,row_id,order_dt,row_number() over(partition by member_id order by order_dt desc) rank from u_analysis_dw.siebel_cx_order where commit_type_cd in('App Delivery','Wechat Delivery','Eleme') and valid=1 and pdate>'2018-09-01') p where rank=1;

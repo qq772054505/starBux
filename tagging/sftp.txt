@@ -1,0 +1,47 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: '!qaz2wsx'
+    url: jdbc:mysql://10.92.195.6:3306/campaign?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+    #password: chinapex@123
+    #url: jdbc:mysql://10.92.194.106:3306/starbucks_bi?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&rewriteBatchedStatements=true
+
+mybatis:
+  mapper-locations: classpath:/xml/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+ftp:
+  #FTP服务器hostname
+  url: 10.92.194.105
+
+  #FTP登录账号
+  #username: ruisdata
+  username: kpi
+  #FTP登录密码
+  #password: 'jnk@aDGV#5546A'
+  password: 'a@!n65412(abvT'
+  #FTP服务器保存目录
+  path: /home/kpi/campaign
+  #path: /data/ruisdata_ftp/campaign
+  #模板存储位置
+  fileName: '/data/soft/campaign_sh/DMP_Campaign_Evaluation.xlsx'
+  #读取excel文件位置
+  readName: /data/soft/campaign
+
+  savePath: /data/soft/campaign/
+  #savePath: /data/soft/campaign_test/20191122/
+
+  weekSavePath: /data/soft/campaign_results_consolidation
+
+  shPath: /data/soft/campaign_sh/load_mem.sh
+
+  shAddPath: /data/soft/campaign_sh/load_mem_incre.sh
+
+  weekPath: /home/kpi/campaign_results_consolidation
+
+  movedPath: /home/kpi/00_Finished,/data/kpitracking_data/communication_finished,/home/kpi/communication_finished
+
+  messageTable: campaign_message

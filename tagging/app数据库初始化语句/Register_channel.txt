@@ -1,0 +1,26 @@
+set td=2020-08-11;
+--ali
+insert overwrite table u_analysis_app.member_Register_channel partition(pdate='${td}',channel='2')
+select a.member_id as member_id,
+case when b.member_id is null then 0 else 1 end Register
+from u_analysis_dw.siebel_member a 
+left join u_analysis_dw.siebel_member b on a.member_id=b.member_id and b.REG_CHANNEL_CD in('3PP-AP','3PP-EM','3PP-FZ','3PP-TB','3PP-TM','taobao');
+--wechat
+insert overwrite table u_analysis_app.member_Register_channel partition(pdate='${td}',channel='3')
+select a.member_id as member_id,
+case when b.member_id is null then 0 else 1 end Register
+from u_analysis_dw.siebel_member a 
+left join u_analysis_dw.siebel_member b on a.member_id=b.member_id and b.REG_CHANNEL_CD in('WeChat','MINI-WECHAT','MINI-WECHAT-OFF');
+--cmb
+insert overwrite table u_analysis_app.member_Register_channel partition(pdate='${td}',channel='4')
+select a.member_id as member_id,
+case when b.member_id is null then 0 else 1 end Register
+from u_analysis_dw.siebel_member a 
+left join u_analysis_dw.siebel_member b on a.member_id=b.member_id and b.REG_CHANNEL_CD='3PP-CMB';
+--apple
+insert overwrite table u_analysis_app.member_Register_channel partition(pdate='${td}',channel='5')
+select a.member_id as member_id,
+case when b.member_id is null then 0 else 1 end Register
+from u_analysis_dw.siebel_member a 
+left join u_analysis_dw.siebel_member b on a.member_id=b.member_id and b.REG_CHANNEL_CD='APP-APPLE';
+
